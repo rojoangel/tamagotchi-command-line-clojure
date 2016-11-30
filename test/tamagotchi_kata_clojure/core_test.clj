@@ -15,4 +15,11 @@
       "When I feed it, it's fullness is increased"
       (let [tamagotchi (tamagotchi/create :fullness 6)]
         (:fullness (tamagotchi/feed tamagotchi)) => 7
-        (:fullness @tamagotchi) => 7))))
+        (:fullness @tamagotchi) => 7)))
+  (facts
+    "about playing"
+    (fact
+      "When I play with it, it's happiness is increased"
+      (let [tamagotchi (tamagotchi/create :happiness 6)]
+        (:happiness (tamagotchi/play tamagotchi)) => 7
+        (:happiness @tamagotchi) => 7))))

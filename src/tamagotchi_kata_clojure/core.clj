@@ -1,7 +1,10 @@
 (ns tamagotchi-kata-clojure.core)
 
 (defn eat [tamagotchi]
-  (swap! tamagotchi update-in [:hungriness] dec))
+  (swap! tamagotchi
+         (comp #(update-in % [:hungriness] dec)
+               #(update-in % [:fullness] inc))))
 
-(defn create []
-  (atom {:hungriness 6}))
+(defn create [& {:keys [hungriness fullness]
+                 :or   {hungriness 3 fullness 3}}]
+  (atom {:hungriness hungriness :fullness fullness}))

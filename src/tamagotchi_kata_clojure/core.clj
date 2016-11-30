@@ -7,8 +7,9 @@
 
 (defn play [tamagotchi]
   (swap! tamagotchi
-         #(update-in % [:happiness] inc)))
+         (comp #(update-in % [:happiness] inc)
+               #(update-in % [:tiredness] inc))))
 
-(defn create [& {:keys [hungriness fullness happiness]
-                 :or   {hungriness 3 fullness 3 happiness 3}}]
-  (atom {:hungriness hungriness :fullness fullness :happiness happiness}))
+(defn create [& {:keys [hungriness fullness happiness tiredness]
+                 :or   {hungriness 3 fullness 3 happiness 3 tiredness 3}}]
+  (atom {:hungriness hungriness :fullness fullness :happiness happiness :tiredness tiredness}))

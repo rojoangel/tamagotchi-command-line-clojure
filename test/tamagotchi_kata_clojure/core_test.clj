@@ -22,4 +22,9 @@
       "When I play with it, it's happiness is increased"
       (let [tamagotchi (tamagotchi/create :happiness 6)]
         (:happiness (tamagotchi/play tamagotchi)) => 7
-        (:happiness @tamagotchi) => 7))))
+        (:happiness @tamagotchi) => 7))
+    (fact
+      "When I play with it, it's tiredness is increased"
+      (let [tamagotchi (tamagotchi/create :tiredness 6)]
+        (:tiredness (tamagotchi/play tamagotchi)) => 7
+        (:tiredness @tamagotchi) => 7))))

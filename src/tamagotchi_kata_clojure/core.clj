@@ -1,6 +1,6 @@
 (ns tamagotchi-kata-clojure.core)
 
-(defn eat [tamagotchi]
+(defn feed [tamagotchi]
   (swap! tamagotchi
          (comp #(update-in % [:hungriness] dec)
                #(update-in % [:fullness] inc))))

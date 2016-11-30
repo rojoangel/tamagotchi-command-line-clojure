@@ -27,4 +27,11 @@
       "When I play with it, it's tiredness is increased"
       (let [tamagotchi (tamagotchi/create :tiredness 6)]
         (:tiredness (tamagotchi/play tamagotchi)) => 7
-        (:tiredness @tamagotchi) => 7))))
+        (:tiredness @tamagotchi) => 7)))
+  (facts
+    "about putting to bed"
+    (fact
+      "When i put it to bed, it's tiredness is decreased"
+      (let [tamagotchi (tamagotchi/create :tiredness 6)]
+        (:tiredness (tamagotchi/put-to-bed tamagotchi)) => 5
+        (:tiredness @tamagotchi) => 5))))

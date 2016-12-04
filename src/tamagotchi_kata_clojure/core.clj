@@ -1,20 +1,26 @@
 (ns tamagotchi-kata-clojure.core)
 
+(defn- decrease [keyword tamagotchi]
+  (update-in tamagotchi [keyword] dec))
+
+(defn- increase [keyword tamagotchi]
+  (update-in tamagotchi [keyword] inc))
+
 (defn feed [tamagotchi]
   (swap! tamagotchi
-         (comp #(update-in % [:hungriness] dec)
-               #(update-in % [:fullness] inc))))
+         (comp #(decrease :hungriness %)
+               #(increase :fullness %))))
 
 (defn play [tamagotchi]
   (swap! tamagotchi
-         (comp #(update-in % [:happiness] inc)
-               #(update-in % [:tiredness] inc))))
+         (comp #(increase :happiness %)
+               #(increase :tiredness %))))
 
 (defn put-to-bed [tamagotchi]
-  (swap! tamagotchi #(update-in % [:tiredness] dec)))
+  (swap! tamagotchi #(decrease :tiredness %)))
 
 (defn make-poop [tamagotchi]
-  (swap! tamagotchi #(update-in % [:fullness] dec)))
+  (swap! tamagotchi #( decrease :fullness %)))
 
 (defn create [& {:keys [hungriness fullness happiness tiredness]
                        :or   {hungriness 3 fullness 3 happiness 3 tiredness 3}}]

@@ -20,8 +20,15 @@
   (swap! tamagotchi #(decrease :tiredness %)))
 
 (defn make-poop [tamagotchi]
-  (swap! tamagotchi #( decrease :fullness %)))
+  (swap! tamagotchi #(decrease :fullness %)))
 
-(defn create [& {:keys [hungriness fullness happiness tiredness]
-                       :or   {hungriness 3 fullness 3 happiness 3 tiredness 3}}]
-  (atom {:hungriness hungriness :fullness fullness :happiness happiness :tiredness tiredness}))
+(defn create
+  [& {:keys [hungriness fullness happiness tiredness]
+      :or   {hungriness 3
+             fullness   3
+             happiness  3
+             tiredness  3}}]
+  (atom {:hungriness hungriness
+         :fullness   fullness
+         :happiness  happiness
+         :tiredness  tiredness}))

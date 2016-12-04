@@ -22,6 +22,9 @@
 (defn make-poop [tamagotchi]
   (swap! tamagotchi #(decrease :fullness %)))
 
+(defn tic [tamagotchi]
+  (swap! tamagotchi #(increase :tiredness %)))
+
 (defn create
   [& {:keys [hungriness fullness happiness tiredness]
       :or   {hungriness 3

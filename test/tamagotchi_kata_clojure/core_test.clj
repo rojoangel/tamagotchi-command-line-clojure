@@ -41,4 +41,11 @@
       "When i make it poop, it's fullness is decreased"
       (let [tamagotchi (tamagotchi/create :fullness 6)]
         (:fullness (tamagotchi/make-poop tamagotchi)) => 5
-        (:fullness @tamagotchi) => 5))))
+        (:fullness @tamagotchi) => 5)))
+  (facts
+    "about changing needs over time"
+    (fact
+      "When time passes, its tiredness is increased"
+      (let [tamagotchi (tamagotchi/create :tiredness 6)]
+        (:tiredness (tamagotchi/tic tamagotchi)) => 7
+        (:tiredness @tamagotchi) => 7))))

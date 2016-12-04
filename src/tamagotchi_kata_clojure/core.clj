@@ -23,7 +23,9 @@
   (swap! tamagotchi #(decrease :fullness %)))
 
 (defn tic [tamagotchi]
-  (swap! tamagotchi #(increase :tiredness %)))
+  (swap! tamagotchi
+         (comp #(increase :tiredness %)
+               #(increase :hungriness %))))
 
 (defn create
   [& {:keys [hungriness fullness happiness tiredness]

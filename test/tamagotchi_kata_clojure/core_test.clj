@@ -48,4 +48,9 @@
       "When time passes, its tiredness is increased"
       (let [tamagotchi (tamagotchi/create :tiredness 6)]
         (:tiredness (tamagotchi/tic tamagotchi)) => 7
-        (:tiredness @tamagotchi) => 7))))
+        (:tiredness @tamagotchi) => 7))
+    (fact
+      "When time passes, its hungriness is increased"
+      (let [tamagotchi (tamagotchi/create :hungriness 6)]
+        (:hungriness (tamagotchi/tic tamagotchi)) => 7
+        (:hungriness @tamagotchi) => 7))))

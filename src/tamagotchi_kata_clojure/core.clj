@@ -1,10 +1,10 @@
 (ns tamagotchi-kata-clojure.core)
 
 (defn- decrease [keyword tamagotchi]
-  (update-in tamagotchi [keyword] dec))
+  (update tamagotchi keyword dec))
 
 (defn- increase [keyword tamagotchi]
-  (update-in tamagotchi [keyword] inc))
+  (update tamagotchi keyword inc))
 
 (defn feed [tamagotchi]
   (swap! tamagotchi

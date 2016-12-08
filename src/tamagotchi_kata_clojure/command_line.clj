@@ -6,6 +6,7 @@
 (defn prompt-menu []
   (println "create [name] : creates a new tamagotchi")
   (println "show          : shows your tamagotchi status")
+  (println "feed          : feeds your tamagotchi")
   (println "quit          : quits - and your tamagotchi dies"))
 
 (defn show-status [tamagotchi]
@@ -32,11 +33,17 @@
       (println "You don't have a tamagotchi. Please create one with 'create'")
       (show-status tamagotchi))
 
+    :feed
+    (if (nil? tamagotchi)
+      (println "You don't have a tamagotchi. Please create one with 'create'")
+      (do (tamagotchi/feed tamagotchi)
+          (dispatch tamagotchi :show nil)))
+
     :quit
     (System/exit 0)
 
     (do
-      (println "Valid commands are: create [name] | show | quit")))
+      (println "Valid commands are: create [name] | show | feed | quit")))
 
   (ui-loop tamagotchi))
 

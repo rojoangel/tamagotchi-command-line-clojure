@@ -8,6 +8,7 @@
   (println "show          : shows your tamagotchi status")
   (println "feed          : feeds your tamagotchi")
   (println "play          : play with your tamagotchi")
+  (println "bed           : puts your tamagotchi to bed")
   (println "quit          : quits - and your tamagotchi dies"))
 
 (defn show-status [tamagotchi]
@@ -49,11 +50,17 @@
       (do (tamagotchi/play tamagotchi)
           (dispatch tamagotchi :show)))
 
+    :bed
+    (if (nil? tamagotchi)
+      (println "You don't have a tamagotchi. Please create one with 'create'")
+      (do (tamagotchi/put-to-bed tamagotchi)
+          (dispatch tamagotchi :show)))
+
     :quit
     (System/exit 0)
 
     (do
-      (println "Valid commands are: create [name] | show | feed | play | quit")))
+      (println "Valid commands are: create [name] | show | feed | play | bed | quit")))
 
   (ui-loop tamagotchi)))
 

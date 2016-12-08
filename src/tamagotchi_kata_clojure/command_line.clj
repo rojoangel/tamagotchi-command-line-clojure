@@ -19,14 +19,17 @@
 
 (declare ui-loop)
 
-(defn dispatch [tamagotchi command arguments]
-  (case command
+(defn dispatch
+  ([tamagotchi command]
+   (dispatch tamagotchi command nil))
+  ([tamagotchi command arguments]
+    (case command
     :create
     (let [name (first arguments)
           tamagotchi (if (nil? name)
                        (tamagotchi/create)
                        (tamagotchi/create :name name))]
-      (dispatch tamagotchi :show nil))
+      (dispatch tamagotchi :show))
 
     :show
     (if (nil? tamagotchi)
@@ -37,7 +40,7 @@
     (if (nil? tamagotchi)
       (println "You don't have a tamagotchi. Please create one with 'create'")
       (do (tamagotchi/feed tamagotchi)
-          (dispatch tamagotchi :show nil)))
+          (dispatch tamagotchi :show)))
 
     :quit
     (System/exit 0)
@@ -45,7 +48,7 @@
     (do
       (println "Valid commands are: create [name] | show | feed | quit")))
 
-  (ui-loop tamagotchi))
+  (ui-loop tamagotchi)))
 
 (defn ui-loop [tamagotchi]
   (let [[command-str & arguments] (str/split (read-line) #" ")

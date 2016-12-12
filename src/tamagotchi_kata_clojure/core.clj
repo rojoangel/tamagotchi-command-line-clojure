@@ -29,12 +29,14 @@
                #(decrease :happiness %))))
 
 (defn create
-  [& {:keys [hungriness fullness happiness tiredness]
-      :or   {hungriness 3
+  [& {:keys [name hungriness fullness happiness tiredness]
+      :or   {name       "Miyagi"
+             hungriness 3
              fullness   3
              happiness  3
              tiredness  3}}]
-  (atom {:hungriness hungriness
+  (atom {:name       name
+         :hungriness hungriness
          :fullness   fullness
          :happiness  happiness
          :tiredness  tiredness}))

@@ -4,7 +4,6 @@
   (:use [tamagotchi-kata-clojure.core :as tamagotchi]))
 
 (defn prompt-menu []
-  (println "create [name] : creates a new tamagotchi")
   (println "show          : shows your tamagotchi status")
   (println "feed          : feeds your tamagotchi")
   (println "play          : play with your tamagotchi")
@@ -12,7 +11,7 @@
   (println "poo           : makes your tamagotchi poo")
   (println "quit          : quits - and your tamagotchi dies"))
 
-(defn show-status [tamagotchi]
+(defn- show-status [tamagotchi]
   (println "name:" (:name @tamagotchi)
            " | hungriness:" (:hungriness @tamagotchi)
            " | fullness:" (:fullness @tamagotchi)
@@ -22,60 +21,51 @@
 
 (declare ui-loop)
 
-(defn dispatch
-  ([tamagotchi command]
-   (dispatch tamagotchi command nil))
-  ([tamagotchi command arguments]
-    (case command
-    :create
-    (let [name (first arguments)
-          tamagotchi (if (nil? name)
-                       (tamagotchi/create)
-                       (tamagotchi/create :name name))]
-      (dispatch tamagotchi :show))
+(defn- dispatch [tamagotchi command]
+  (case command
 
     :show
-    (if (nil? tamagotchi)
-      (println "You don't have a tamagotchi. Please create one with 'create'")
-      (show-status tamagotchi))
+    (show-status tamagotchi)
 
     :feed
-    (if (nil? tamagotchi)
-      (println "You don't have a tamagotchi. Please create one with 'create'")
-      (do (tamagotchi/feed tamagotchi)
-          (dispatch tamagotchi :show)))
+    (do (tamagotchi/feed tamagotchi)
+        (dispatch tamagotchi :show))
 
     :play
-    (if (nil? tamagotchi)
-      (println "You don't have a tamagotchi. Please create one with 'create'")
-      (do (tamagotchi/play tamagotchi)
-          (dispatch tamagotchi :show)))
+    (do (tamagotchi/play tamagotchi)
+        (dispatch tamagotchi :show))
 
     :bed
-    (if (nil? tamagotchi)
-      (println "You don't have a tamagotchi. Please create one with 'create'")
-      (do (tamagotchi/put-to-bed tamagotchi)
-          (dispatch tamagotchi :show)))
+    (do (tamagotchi/put-to-bed tamagotchi)
+        (dispatch tamagotchi :show))
 
     :poo
-    (if (nil? tamagotchi)
-      (println "You don't have a tamagotchi. Please create one with 'create'")
-      (do (tamagotchi/make-poop tamagotchi)
-          (dispatch tamagotchi :show)))
+    (do (tamagotchi/make-poop tamagotchi)
+        (dispatch tamagotchi :show))
 
     :quit
     (System/exit 0)
 
-    (do
-      (println "Valid commands are: create [name] | show | feed | play | bed | poo | quit")))
+    ;; otherwise
+    (println "Valid commands are: show | feed | play | bed | poo | quit"))
 
-  (ui-loop tamagotchi)))
+  (ui-loop tamagotchi))
 
-(defn ui-loop [tamagotchi]
-  (let [[command-str & arguments] (str/split (read-line) #" ")
+
+(defn- ui-loop [tamagotchi]
+  (let [[command-str & _] (str/split (read-line) #" ")
         command (keyword command-str)]
-    (dispatch tamagotchi command arguments)))
+    (dispatch tamagotchi command)))
+
+(defn- init-tamagotchi []
+  (do
+    (println "Name your tamagotchi [Miyagi]")
+    (let [[name & _] (str/split (read-line) #" ")]
+      (dispatch
+        (if (str/blank? name)
+          (tamagotchi/create)
+          (tamagotchi/create :name name)) :show))))
 
 (defn -main [& args]
   (prompt-menu)
-  (ui-loop nil))
+  (ui-loop (init-tamagotchi)))

@@ -21,27 +21,27 @@
 
 (declare ui-loop)
 
-(defn- dispatch [tamagotchi command]
+(defn- dispatch [command]
   (case command
 
     :show
     (show-status tamagotchi)
 
     :feed
-    (do (tamagotchi/feed tamagotchi)
-        (dispatch tamagotchi :show))
+    (do (tamagotchi/feed)
+        (dispatch :show))
 
     :play
-    (do (tamagotchi/play tamagotchi)
-        (dispatch tamagotchi :show))
+    (do (tamagotchi/play)
+        (dispatch :show))
 
     :bed
-    (do (tamagotchi/put-to-bed tamagotchi)
-        (dispatch tamagotchi :show))
+    (do (tamagotchi/put-to-bed)
+        (dispatch :show))
 
     :poo
-    (do (tamagotchi/make-poop tamagotchi)
-        (dispatch tamagotchi :show))
+    (do (tamagotchi/make-poop)
+        (dispatch :show))
 
     :quit
     (System/exit 0)
@@ -49,23 +49,24 @@
     ;; otherwise
     (println "Valid commands are: show | feed | play | bed | poo | quit"))
 
-  (ui-loop tamagotchi))
+  (ui-loop))
 
 
-(defn- ui-loop [tamagotchi]
+(defn- ui-loop []
   (let [[command-str & _] (str/split (read-line) #" ")
         command (keyword command-str)]
-    (dispatch tamagotchi command)))
+    (dispatch command)))
 
 (defn- init-tamagotchi []
   (do
     (println "Name your tamagotchi [Miyagi]")
     (let [[name & _] (str/split (read-line) #" ")]
-      (dispatch
-        (if (str/blank? name)
-          (tamagotchi/create)
-          (tamagotchi/create :name name)) :show))))
+      (if (str/blank? name)
+        (tamagotchi/create)
+        (tamagotchi/create :name name))
+      (dispatch :show))))
 
 (defn -main [& args]
   (prompt-menu)
-  (ui-loop (init-tamagotchi)))
+  (init-tamagotchi)
+  (ui-loop))

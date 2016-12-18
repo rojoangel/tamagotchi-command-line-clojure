@@ -1,28 +1,30 @@
 (ns tamagotchi-kata-clojure.core)
 
+(def tamagotchi (atom {}))
+
 (defn- decrease [keyword tamagotchi]
   (update tamagotchi keyword dec))
 
 (defn- increase [keyword tamagotchi]
   (update tamagotchi keyword inc))
 
-(defn feed [tamagotchi]
+(defn feed []
   (swap! tamagotchi
          (comp #(decrease :hungriness %)
                #(increase :fullness %))))
 
-(defn play [tamagotchi]
+(defn play []
   (swap! tamagotchi
          (comp #(increase :happiness %)
                #(increase :tiredness %))))
 
-(defn put-to-bed [tamagotchi]
+(defn put-to-bed []
   (swap! tamagotchi #(decrease :tiredness %)))
 
-(defn make-poop [tamagotchi]
+(defn make-poop []
   (swap! tamagotchi #(decrease :fullness %)))
 
-(defn tic [tamagotchi]
+(defn tic []
   (swap! tamagotchi
          (comp #(increase :tiredness %)
                #(increase :hungriness %)
@@ -35,8 +37,10 @@
              fullness   3
              happiness  3
              tiredness  3}}]
-  (atom {:name       name
+  (swap! tamagotchi
+         assoc
+         :name name
          :hungriness hungriness
-         :fullness   fullness
-         :happiness  happiness
-         :tiredness  tiredness}))
+         :fullness fullness
+         :happiness happiness
+         :tiredness tiredness))

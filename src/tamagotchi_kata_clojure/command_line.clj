@@ -15,6 +15,9 @@
 (defn describe-command [{:keys [name desc]}]
   (println (clansi/style (format "%-5s" name) :green) desc))
 
+(defn show-valid_commands []
+  (println "Valid commands are: show | feed | play | bed | poo | quit"))
+
 (defn prompt-menu []
   (doall (map describe-command commands)))
 
@@ -54,7 +57,7 @@
     (System/exit 0)
 
     ;; otherwise
-    (println "Valid commands are: show | feed | play | bed | poo | quit"))
+    (show-valid_commands))
 
   (ui-loop))
 

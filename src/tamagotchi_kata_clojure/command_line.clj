@@ -13,7 +13,7 @@
    {:name "quit" :desc "quits - and your tamagotchi dies"}])
 
 (defn describe-command [{:keys [name desc]}]
-  (println (clansi/style name :green) desc))
+  (println (clansi/style (format "%-5s" name) :green) desc))
 
 (defn prompt-menu []
   (doall (map describe-command commands)))

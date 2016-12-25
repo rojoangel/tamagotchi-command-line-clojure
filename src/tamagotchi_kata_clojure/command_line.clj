@@ -4,13 +4,19 @@
             [clansi])
   (:use [tamagotchi-kata-clojure.core :as tamagotchi]))
 
+(def commands
+  {"show" "shows your tamagotchi status"
+   "feed" "feeds your tamagotchi"
+   "play" "play with your tamagotchi"
+   "bed"  "puts your tamagotchi to bed"
+   "poo"  "makes your tamagotchi poo"
+   "quit" "quits - and your tamagotchi dies"})
+
+(defn describe-command [[command description]]
+  (println (clansi/style command :green) description))
+
 (defn prompt-menu []
-  (println (clansi/style "show" :green) "          : shows your tamagotchi status")
-  (println (clansi/style "feed" :green) "          : feeds your tamagotchi")
-  (println (clansi/style "play" :green) "          : play with your tamagotchi")
-  (println (clansi/style "bed" :green) "           : puts your tamagotchi to bed")
-  (println (clansi/style "poo" :green) "           : makes your tamagotchi poo")
-  (println (clansi/style "quit" :green) "          : quits - and your tamagotchi dies"))
+  (doall (map describe-command commands)))
 
 (defn- show-status [tamagotchi]
   (println "name:" (:name @tamagotchi)

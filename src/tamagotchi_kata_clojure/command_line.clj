@@ -1,15 +1,16 @@
 (ns tamagotchi-kata-clojure.command-line
   (:gen-class)
-  (:require [clojure.string :as str])
+  (:require [clojure.string :as str]
+            [clansi])
   (:use [tamagotchi-kata-clojure.core :as tamagotchi]))
 
 (defn prompt-menu []
-  (println "show          : shows your tamagotchi status")
-  (println "feed          : feeds your tamagotchi")
-  (println "play          : play with your tamagotchi")
-  (println "bed           : puts your tamagotchi to bed")
-  (println "poo           : makes your tamagotchi poo")
-  (println "quit          : quits - and your tamagotchi dies"))
+  (println (clansi/style "show" :green) "          : shows your tamagotchi status")
+  (println (clansi/style "feed" :green) "          : feeds your tamagotchi")
+  (println (clansi/style "play" :green) "          : play with your tamagotchi")
+  (println (clansi/style "bed" :green) "           : puts your tamagotchi to bed")
+  (println (clansi/style "poo" :green) "           : makes your tamagotchi poo")
+  (println (clansi/style "quit" :green) "          : quits - and your tamagotchi dies"))
 
 (defn- show-status [tamagotchi]
   (println "name:" (:name @tamagotchi)

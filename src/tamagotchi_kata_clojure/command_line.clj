@@ -5,15 +5,15 @@
   (:use [tamagotchi-kata-clojure.core :as tamagotchi]))
 
 (def commands
-  {"show" "shows your tamagotchi status"
-   "feed" "feeds your tamagotchi"
-   "play" "play with your tamagotchi"
-   "bed"  "puts your tamagotchi to bed"
-   "poo"  "makes your tamagotchi poo"
-   "quit" "quits - and your tamagotchi dies"})
+  [{:name "show" :desc "shows your tamagotchi status"}
+   {:name "feed" :desc "feeds your tamagotchi"}
+   {:name "play" :desc "play with your tamagotchi"}
+   {:name "bed"  :desc "puts your tamagotchi to bed"}
+   {:name "poo"  :desc "makes your tamagotchi poo"}
+   {:name "quit" :desc "quits - and your tamagotchi dies"}])
 
-(defn describe-command [[command description]]
-  (println (clansi/style command :green) description))
+(defn describe-command [{:keys [name desc]}]
+  (println (clansi/style name :green) desc))
 
 (defn prompt-menu []
   (doall (map describe-command commands)))

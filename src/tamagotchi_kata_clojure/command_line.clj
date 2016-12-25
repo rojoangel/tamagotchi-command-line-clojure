@@ -13,13 +13,13 @@
    {:name "quit" :desc "quits - and your tamagotchi dies"}])
 
 (defn format-command-name [name]
-  (clansi/style (format "%-5s" name) :green))
+  (clansi/style name :green))
 
 (defn describe-command [{:keys [name desc]}]
-  (println (format-command-name name) desc))
+  (println (format-command-name (format "%-5s" name)) desc))
 
 (defn show-valid_commands []
-  (println "Valid commands are: show | feed | play | bed | poo | quit"))
+  (println "Valid commands are: " (str/join " | " (map #(format-command-name(:name %)) commands))))
 
 (defn prompt-menu []
   (doall (map describe-command commands)))

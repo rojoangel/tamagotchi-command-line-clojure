@@ -18,7 +18,7 @@
 (defn describe-command [{:keys [name desc]}]
   (println (format-command-name (format "%-5s" name)) desc))
 
-(defn show-valid_commands []
+(defn show-valid-commands []
   (println "Valid commands are: " (str/join " | " (map #(format-command-name(:name %)) commands))))
 
 (defn prompt-menu []
@@ -60,7 +60,7 @@
     (System/exit 0)
 
     ;; otherwise
-    (show-valid_commands))
+    (show-valid-commands))
 
   (ui-loop))
 

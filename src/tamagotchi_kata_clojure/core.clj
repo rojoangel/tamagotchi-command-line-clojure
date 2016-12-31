@@ -1,5 +1,7 @@
 (ns tamagotchi-kata-clojure.core)
 
+(def default-initial-attribute-value 50)
+
 (def tamagotchi (atom {}))
 
 (defn- decrease [keyword tamagotchi]
@@ -33,10 +35,10 @@
 (defn create
   [& {:keys [name hungriness fullness happiness tiredness]
       :or   {name       "Miyagi"
-             hungriness 3
-             fullness   3
-             happiness  3
-             tiredness  3}}]
+             hungriness default-initial-attribute-value
+             fullness   default-initial-attribute-value
+             happiness  default-initial-attribute-value
+             tiredness  default-initial-attribute-value}}]
   (swap! tamagotchi
          assoc
          :name name

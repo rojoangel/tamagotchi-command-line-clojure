@@ -57,4 +57,30 @@
       "When time passes, its happiness is decreased"
       (do
         (tamagotchi/create :happiness 6)
-        (:happiness (tamagotchi/tic)) => 5))))
+        (:happiness (tamagotchi/tic)) => 5)))
+  (facts
+    "about dying when max/min levels are reached"
+    (fact
+      "When fullness reaches maximum tamagotchi dies"
+      (do
+        (tamagotchi/create :fullness 99)
+        (tamagotchi/feed)
+        (is-dead?) => true))
+    (fact
+      "When hungriness reaches maximum tamagotchi dies"
+      (do
+        (tamagotchi/create :hungriness 99)
+        (tamagotchi/tic)
+        (is-dead?) => true))
+    (fact
+      "When tiredness reaches maximum tamagotchi dies"
+      (do
+        (tamagotchi/create :tiredness 99)
+        (tamagotchi/play)
+        (is-dead?) => true))
+    (fact
+      "When happiness reaches minimum tamagotchi dies"
+      (do
+        (tamagotchi/create :happiness 1)
+        (tamagotchi/tic)
+        (is-dead?) => true))))

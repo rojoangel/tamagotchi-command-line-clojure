@@ -1,5 +1,9 @@
 (ns tamagotchi-kata-clojure.core)
 
+(def default-initial-attribute-value 50)
+(def min-attribute-value 0)
+(def max-attribute-value 100)
+
 (def tamagotchi (atom {}))
 
 (defn- decrease [keyword tamagotchi]
@@ -30,13 +34,7 @@
                #(increase :hungriness %)
                #(decrease :happiness %))))
 
-(defn create
-  [& {:keys [name hungriness fullness happiness tiredness]
-      :or   {name       "Miyagi"
-             hungriness 3
-             fullness   3
-             happiness  3
-             tiredness  3}}]
+(defn- breed [name hungriness fullness happiness tiredness]
   (swap! tamagotchi
          assoc
          :name name
@@ -44,3 +42,26 @@
          :fullness fullness
          :happiness happiness
          :tiredness tiredness))
+
+(defn- kill []
+  (swap! tamagotchi dissoc :name :hungriness :fullness :happiness :tiredness))
+
+(defn is-dead? []
+  (empty? @tamagotchi))
+
+(defn create
+  [& {:keys [name hungriness fullness happiness tiredness]
+      :or   {name       "Miyagi"
+             hungriness default-initial-attribute-value
+             fullness   default-initial-attribute-value
+             happiness  default-initial-attribute-value
+             tiredness  default-initial-attribute-value}}]
+  (add-watch tamagotchi
+             :is-death?
+             (fn [key atom old-state new-state]
+               (when (or (= (:fullness new-state) max-attribute-value)
+                         (= (:hungriness new-state) max-attribute-value)
+                         (= (:tiredness new-state) max-attribute-value)
+                         (= (:happiness new-state) min-attribute-value))
+                 (kill))))
+  (breed name hungriness fullness happiness tiredness))

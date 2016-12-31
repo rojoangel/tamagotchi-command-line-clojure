@@ -15,6 +15,9 @@
 (defn format-command-name [name]
   (clansi/style name :green))
 
+(defn format-attribute-value [value]
+  (clansi/style value :green))
+
 (defn describe-command [{:keys [name desc]}]
   (println (format-command-name (format "%-5s" name)) desc))
 
@@ -26,10 +29,10 @@
 
 (defn- show-status [tamagotchi]
   (println "name:" (:name @tamagotchi)
-           " | hungriness:" (:hungriness @tamagotchi)
-           " | fullness:" (:fullness @tamagotchi)
-           " | happiness:" (:happiness @tamagotchi)
-           " | tiredness:" (:tiredness @tamagotchi)
+           " | hungriness:" (format-attribute-value (:hungriness @tamagotchi))
+           " | fullness:" (format-attribute-value (:fullness @tamagotchi))
+           " | happiness:" (format-attribute-value (:happiness @tamagotchi))
+           " | tiredness:" (format-attribute-value (:tiredness @tamagotchi))
            ))
 
 (declare ui-loop)

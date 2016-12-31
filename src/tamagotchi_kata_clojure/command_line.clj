@@ -16,7 +16,11 @@
   (clansi/style name :green))
 
 (defn format-attribute-value [value]
-  (clansi/style value :green))
+  (if (< value (/ tamagotchi/max-attribute-value 10))
+    (clansi/style value :red)
+    (if (< value (/ tamagotchi/max-attribute-value 4))
+      (clansi/style value :yellow)
+      (clansi/style value :green))))
 
 (defn describe-command [{:keys [name desc]}]
   (println (format-command-name (format "%-5s" name)) desc))

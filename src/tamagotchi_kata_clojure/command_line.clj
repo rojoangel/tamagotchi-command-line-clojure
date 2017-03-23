@@ -14,7 +14,7 @@
 
 (def attribute-defs
   {:hungriness {:label "hungriness" :type :increasing}
-   :fullness {:label "fullness" :type :decreasing}
+   :fullness {:label "fullness" :type :increasing}
    :happiness {:label "happiness" :type :decreasing}
    :tiredness {:label "tiredness" :type :increasing}})
 

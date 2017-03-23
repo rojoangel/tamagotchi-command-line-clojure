@@ -44,7 +44,7 @@
          :tiredness tiredness))
 
 (defn- kill []
-  (swap! tamagotchi dissoc :name :hungriness :fullness :happiness :tiredness))
+  (reset! tamagotchi {}))
 
 (defn is-dead? []
   (empty? @tamagotchi))

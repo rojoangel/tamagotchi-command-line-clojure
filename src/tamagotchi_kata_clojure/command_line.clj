@@ -64,6 +64,11 @@
       (if (str/blank? name)
         (tamagotchi/create)
         (tamagotchi/create :name name))
+      (add-watch tamagotchi
+                 :quit-when
+                 (fn [key atom old-state new-state]
+                   (when (empty? new-state)
+                     (dispatch :quit))))
       (dispatch :show))))
 
 (defn -main [& args]

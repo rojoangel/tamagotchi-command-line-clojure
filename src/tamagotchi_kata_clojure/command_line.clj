@@ -12,6 +12,12 @@
    {:name "poo"  :desc "makes your tamagotchi poo"}
    {:name "quit" :desc "quits - and your tamagotchi dies"}])
 
+(def attribute-defs
+  {:hungriness {:label "hungriness"}
+   :fullness {:label "fullness"}
+   :happiness {:label "happiness"}
+   :tiredness {:label "tiredness"}})
+
 (defn format-command-name [name]
   (clansi/style name :green))
 
@@ -21,6 +27,11 @@
     (if (< value (/ tamagotchi/max-attribute-value 4))
       (clansi/style value :yellow)
       (clansi/style value :green))))
+
+(defn format-attribute [attribute-def]
+  (let [attribute-keyword (key attribute-def)
+        attribute-label (:label (val attribute-def))]
+    (str attribute-label ": " (format-attribute-value (get @tamagotchi attribute-keyword)))))
 
 (defn describe-command [{:keys [name desc]}]
   (println (format-command-name (format "%-5s" name)) desc))
@@ -32,12 +43,7 @@
   (doall (map describe-command commands)))
 
 (defn- show-status [tamagotchi]
-  (println "name:" (:name @tamagotchi)
-           " | hungriness:" (format-attribute-value (:hungriness @tamagotchi))
-           " | fullness:" (format-attribute-value (:fullness @tamagotchi))
-           " | happiness:" (format-attribute-value (:happiness @tamagotchi))
-           " | tiredness:" (format-attribute-value (:tiredness @tamagotchi))
-           ))
+  (println "name:" (:name @tamagotchi) "*" (str/join " | " (map format-attribute attribute-defs))))
 
 (declare ui-loop)
 

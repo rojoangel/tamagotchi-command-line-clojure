@@ -1,23 +1,59 @@
 (ns tamagotchi-kata-clojure.command-line
   (:gen-class)
-  (:require [clojure.string :as str])
+  (:require [clojure.string :as str]
+            [clansi])
   (:use [tamagotchi-kata-clojure.core :as tamagotchi]))
 
+(def commands
+  [{:name "show" :desc "shows your tamagotchi status"}
+   {:name "feed" :desc "feeds your tamagotchi"}
+   {:name "play" :desc "play with your tamagotchi"}
+   {:name "bed"  :desc "puts your tamagotchi to bed"}
+   {:name "poo"  :desc "makes your tamagotchi poo"}
+   {:name "quit" :desc "quits - and your tamagotchi dies"}])
+
+(def attribute-defs
+  {:hungriness {:label "hungriness" :type :increasing}
+   :fullness {:label "fullness" :type :decreasing}
+   :happiness {:label "happiness" :type :decreasing}
+   :tiredness {:label "tiredness" :type :increasing}})
+
+(defn format-command-name [name]
+  (clansi/style name :green))
+
+(defmulti format-attribute-value :type)
+
+(defmethod format-attribute-value :decreasing [{type :type value :val}]
+  (if (< value (* tamagotchi/max-attribute-value 0.1))
+    (clansi/style value :red)
+    (if (< value (* tamagotchi/max-attribute-value 0.25))
+      (clansi/style value :yellow)
+      (clansi/style value :green))))
+
+(defmethod format-attribute-value :increasing [{type :type value :val}]
+  (if (> value (* tamagotchi/max-attribute-value 0.9))
+    (clansi/style value :red)
+    (if (> value (* tamagotchi/max-attribute-value 0.75))
+      (clansi/style value :yellow)
+      (clansi/style value :green))))
+
+(defn format-attribute [attribute-def]
+  (let [attribute-keyword (key attribute-def)
+        attribute-label (:label (val attribute-def))
+        attribute-type (:type (val attribute-def))]
+    (str attribute-label ": " (format-attribute-value {:type attribute-type :val (get @tamagotchi attribute-keyword)}))))
+
+(defn describe-command [{:keys [name desc]}]
+  (println (format-command-name (format "%-5s" name)) desc))
+
+(defn show-valid-commands []
+  (println "Valid commands are: " (str/join " | " (map #(format-command-name(:name %)) commands))))
+
 (defn prompt-menu []
-  (println "show          : shows your tamagotchi status")
-  (println "feed          : feeds your tamagotchi")
-  (println "play          : play with your tamagotchi")
-  (println "bed           : puts your tamagotchi to bed")
-  (println "poo           : makes your tamagotchi poo")
-  (println "quit          : quits - and your tamagotchi dies"))
+  (doall (map describe-command commands)))
 
 (defn- show-status [tamagotchi]
-  (println "name:" (:name @tamagotchi)
-           " | hungriness:" (:hungriness @tamagotchi)
-           " | fullness:" (:fullness @tamagotchi)
-           " | happiness:" (:happiness @tamagotchi)
-           " | tiredness:" (:tiredness @tamagotchi)
-           ))
+  (println "name:" (:name @tamagotchi) "*" (str/join " | " (map format-attribute attribute-defs))))
 
 (declare ui-loop)
 
@@ -47,7 +83,7 @@
     (System/exit 0)
 
     ;; otherwise
-    (println "Valid commands are: show | feed | play | bed | poo | quit"))
+    (show-valid-commands))
 
   (ui-loop))
 

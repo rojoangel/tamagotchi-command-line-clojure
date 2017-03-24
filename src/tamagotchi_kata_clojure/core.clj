@@ -6,11 +6,21 @@
 
 (def tamagotchi (atom {}))
 
+(defn- inc-up-to-max [n]
+  (if (< n max-attribute-value)
+    (inc n)
+    n))
+
+(defn- dec-down-to-min [n]
+  (if (> n min-attribute-value)
+    (dec n)
+    n))
+
 (defn- decrease [keyword tamagotchi]
-  (update tamagotchi keyword dec))
+  (update tamagotchi keyword dec-down-to-min))
 
 (defn- increase [keyword tamagotchi]
-  (update tamagotchi keyword inc))
+  (update tamagotchi keyword inc-up-to-max))
 
 (defn feed []
   (swap! tamagotchi

@@ -83,4 +83,26 @@
       (do
         (tamagotchi/create :happiness 1)
         (tamagotchi/tic)
-        (is-dead?) => true))))
+        (is-dead?) => true)))
+  (facts
+    "about not going beyond min & max attribute values"
+    (fact
+      "When fullness reaches minimum it is not further decreased"
+      (do
+        (tamagotchi/create :fullness tamagotchi/min-attribute-value)
+        (:fullness (tamagotchi/make-poop)) => tamagotchi/min-attribute-value))
+    (fact
+      "When hungriness reaches minimum it is not further decreased"
+      (do
+        (tamagotchi/create :hungriness tamagotchi/min-attribute-value)
+        (:hungriness (tamagotchi/feed)) => tamagotchi/min-attribute-value))
+    (fact
+      "When tiredness reaches minimum it is not further decreased"
+      (do
+        (tamagotchi/create :tiredness tamagotchi/min-attribute-value)
+        (:tiredness (tamagotchi/put-to-bed)) => tamagotchi/min-attribute-value))
+    (fact
+      "When happiness reaches maximum it is not further increased"
+      (do
+        (tamagotchi/create :happiness tamagotchi/max-attribute-value)
+        (:happiness (tamagotchi/play)) => tamagotchi/max-attribute-value))))

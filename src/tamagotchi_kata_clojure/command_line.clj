@@ -9,15 +9,15 @@
   [{:name "show" :desc "shows your tamagotchi status"}
    {:name "feed" :desc "feeds your tamagotchi"}
    {:name "play" :desc "play with your tamagotchi"}
-   {:name "bed"  :desc "puts your tamagotchi to bed"}
-   {:name "poo"  :desc "makes your tamagotchi poo"}
+   {:name "bed" :desc "puts your tamagotchi to bed"}
+   {:name "poo" :desc "makes your tamagotchi poo"}
    {:name "quit" :desc "quits - and your tamagotchi dies"}])
 
 (def attribute-defs
   {:hungriness {:label "hungriness" :type :increasing}
-   :fullness {:label "fullness" :type :increasing}
-   :happiness {:label "happiness" :type :decreasing}
-   :tiredness {:label "tiredness" :type :increasing}})
+   :fullness   {:label "fullness" :type :increasing}
+   :happiness  {:label "happiness" :type :decreasing}
+   :tiredness  {:label "tiredness" :type :increasing}})
 
 (def tic-pool (at/mk-pool))
 
@@ -52,7 +52,7 @@
   (println (format-command-name (format "%-5s" name)) desc))
 
 (defn show-valid-commands []
-  (println "Valid commands are: " (str/join " | " (map #(format-command-name(:name %)) commands))))
+  (println "Valid commands are: " (str/join " | " (map #(format-command-name (:name %)) commands))))
 
 (defn prompt-menu []
   (doall (map describe-command commands)))
@@ -97,9 +97,14 @@
         command (keyword command-str)]
     (dispatch command)))
 
-(defn start-tic [delay]
+(defn- ui-tic []
+  (do
+    (tamagotchi/tic)
+    (show-status tamagotchi)))
+
+(defn configure-tic [delay]
   (at/every delay
-            #(do (tamagotchi/tic) (show-status tamagotchi))
+            ui-tic
             tic-pool
             :initial-delay delay))
 
@@ -110,7 +115,7 @@
       (if (str/blank? name)
         (tamagotchi/create)
         (tamagotchi/create :name name))
-      (start-tic tic-delay)
+      (configure-tic tic-delay)
       (add-watch tamagotchi
                  :quit-when
                  (fn [key atom old-state new-state]

@@ -21,6 +21,8 @@
 
 (def tic-pool (at/mk-pool))
 
+(def tic-delay 10000)
+
 (defn format-command-name [name]
   (clansi/style name :green))
 
@@ -90,11 +92,16 @@
 
   (ui-loop))
 
-
 (defn- ui-loop []
   (let [[command-str & _] (str/split (read-line) #" ")
         command (keyword command-str)]
     (dispatch command)))
+
+(defn start-tic [delay]
+  (at/every delay
+            #(do (tamagotchi/tic) (show-status tamagotchi))
+            tic-pool
+            :initial-delay delay))
 
 (defn- init-tamagotchi []
   (do
@@ -103,7 +110,7 @@
       (if (str/blank? name)
         (tamagotchi/create)
         (tamagotchi/create :name name))
-      (at/every 10000 #(do (tamagotchi/tic) (show-status tamagotchi)) tic-pool :initial-delay 10000)
+      (start-tic tic-delay)
       (add-watch tamagotchi
                  :quit-when
                  (fn [key atom old-state new-state]

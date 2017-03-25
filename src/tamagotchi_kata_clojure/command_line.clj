@@ -1,9 +1,9 @@
 (ns tamagotchi-kata-clojure.command-line
   (:gen-class)
   (:require [clojure.string :as str]
-            [clansi]
-            [overtone.at-at :as at])
-  (:use [tamagotchi-kata-clojure.core :as tamagotchi]))
+            [clansi])
+  (:use [tamagotchi-kata-clojure.core :as tamagotchi]
+        [tamagotchi-kata-clojure.tic :as tic]))
 
 (def commands
   [{:name "show" :desc "shows your tamagotchi status"}
@@ -18,10 +18,6 @@
    :fullness   {:label "fullness" :type :increasing}
    :happiness  {:label "happiness" :type :decreasing}
    :tiredness  {:label "tiredness" :type :increasing}})
-
-(def tic-pool (at/mk-pool))
-
-(def tic-delay 10000)
 
 (defn format-command-name [name]
   (clansi/style name :green))
@@ -102,12 +98,6 @@
     (tamagotchi/tic)
     (show-status tamagotchi)))
 
-(defn configure-tic [delay fn]
-  (at/every delay
-            fn
-            tic-pool
-            :initial-delay delay))
-
 (defn- init-tamagotchi []
   (do
     (println "Name your tamagotchi [Miyagi]")
@@ -115,7 +105,7 @@
       (if (str/blank? name)
         (tamagotchi/create)
         (tamagotchi/create :name name))
-      (configure-tic tic-delay ui-tic)
+      (tic/configure tic/delay ui-tic)
       (add-watch tamagotchi
                  :quit-when
                  (fn [key atom old-state new-state]

@@ -2,21 +2,22 @@
   (:gen-class)
   (:require [clojure.string :as str]
             [clansi])
-  (:use [tamagotchi-kata-clojure.core :as tamagotchi]))
+  (:use [tamagotchi-kata-clojure.core :as tamagotchi]
+        [tamagotchi-kata-clojure.tic :as tic]))
 
 (def commands
   [{:name "show" :desc "shows your tamagotchi status"}
    {:name "feed" :desc "feeds your tamagotchi"}
    {:name "play" :desc "play with your tamagotchi"}
-   {:name "bed"  :desc "puts your tamagotchi to bed"}
-   {:name "poo"  :desc "makes your tamagotchi poo"}
+   {:name "bed" :desc "puts your tamagotchi to bed"}
+   {:name "poo" :desc "makes your tamagotchi poo"}
    {:name "quit" :desc "quits - and your tamagotchi dies"}])
 
 (def attribute-defs
   {:hungriness {:label "hungriness" :type :increasing}
-   :fullness {:label "fullness" :type :increasing}
-   :happiness {:label "happiness" :type :decreasing}
-   :tiredness {:label "tiredness" :type :increasing}})
+   :fullness   {:label "fullness" :type :increasing}
+   :happiness  {:label "happiness" :type :decreasing}
+   :tiredness  {:label "tiredness" :type :increasing}})
 
 (defn format-command-name [name]
   (clansi/style name :green))
@@ -47,7 +48,7 @@
   (println (format-command-name (format "%-5s" name)) desc))
 
 (defn show-valid-commands []
-  (println "Valid commands are: " (str/join " | " (map #(format-command-name(:name %)) commands))))
+  (println "Valid commands are: " (str/join " | " (map #(format-command-name (:name %)) commands))))
 
 (defn prompt-menu []
   (doall (map describe-command commands)))
@@ -87,11 +88,15 @@
 
   (ui-loop))
 
-
 (defn- ui-loop []
   (let [[command-str & _] (str/split (read-line) #" ")
         command (keyword command-str)]
     (dispatch command)))
+
+(defn- ui-tic []
+  (do
+    (tamagotchi/tic)
+    (show-status tamagotchi)))
 
 (defn- init-tamagotchi []
   (do
@@ -100,6 +105,7 @@
       (if (str/blank? name)
         (tamagotchi/create)
         (tamagotchi/create :name name))
+      (tic/configure ui-tic)
       (add-watch tamagotchi
                  :quit-when
                  (fn [key atom old-state new-state]

@@ -105,7 +105,7 @@
       (if (str/blank? name)
         (tamagotchi/create)
         (tamagotchi/create :name name))
-      (tic/configure tic/delay ui-tic)
+      (tic/configure ui-tic)
       (add-watch tamagotchi
                  :quit-when
                  (fn [key atom old-state new-state]

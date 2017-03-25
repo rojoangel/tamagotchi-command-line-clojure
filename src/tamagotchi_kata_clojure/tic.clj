@@ -5,7 +5,7 @@
 
 (def delay 10000)
 
-(defn configure [delay fn]
+(defn configure [fn]
   (at/every delay
             fn
             pool

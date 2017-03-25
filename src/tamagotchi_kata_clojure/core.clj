@@ -4,8 +4,6 @@
 (def min-attribute-value 0)
 (def max-attribute-value 100)
 
-(def tamagotchi (atom {}))
-
 (defn- inc-up-to-max [n]
   (if (< n max-attribute-value)
     (inc n)
@@ -22,42 +20,36 @@
 (defn- increase [keyword tamagotchi]
   (update tamagotchi keyword inc-up-to-max))
 
-(defn feed []
-  (swap! tamagotchi
-         (comp #(decrease :hungriness %)
-               #(increase :fullness %))))
+(defn feed [tamagotchi]
+  (->> tamagotchi
+       (increase :fullness)
+       (decrease :hungriness)))
 
-(defn play []
-  (swap! tamagotchi
-         (comp #(increase :happiness %)
-               #(increase :tiredness %))))
+(defn play [tamagotchi]
+  (->> tamagotchi
+       (increase :happiness)
+       (increase :tiredness)))
 
-(defn put-to-bed []
-  (swap! tamagotchi #(decrease :tiredness %)))
+(defn put-to-bed [tamagotchi]
+  (decrease :tiredness tamagotchi))
 
-(defn make-poop []
-  (swap! tamagotchi #(decrease :fullness %)))
+(defn make-poop [tamagotchi]
+  (decrease :fullness tamagotchi))
 
-(defn tic []
-  (swap! tamagotchi
-         (comp #(increase :tiredness %)
-               #(increase :hungriness %)
-               #(decrease :happiness %))))
+(defn tic [tamagotchi]
+  (->> tamagotchi
+       (increase :tiredness)
+       (increase :hungriness)
+       (decrease :happiness)))
 
-(defn- breed [name hungriness fullness happiness tiredness]
-  (swap! tamagotchi
-         assoc
-         :name name
-         :hungriness hungriness
-         :fullness fullness
-         :happiness happiness
-         :tiredness tiredness))
-
-(defn- kill []
-  (reset! tamagotchi {}))
-
-(defn is-dead? []
-  (empty? @tamagotchi))
+(defn breed [name hungriness fullness happiness tiredness]
+  (assoc
+    {}
+    :name name
+    :hungriness hungriness
+    :fullness fullness
+    :happiness happiness
+    :tiredness tiredness))
 
 (defn create
   [& {:keys [name hungriness fullness happiness tiredness]
@@ -66,12 +58,4 @@
              fullness   default-initial-attribute-value
              happiness  default-initial-attribute-value
              tiredness  default-initial-attribute-value}}]
-  (add-watch tamagotchi
-             :is-death?
-             (fn [key atom old-state new-state]
-               (when (or (= (:fullness new-state) max-attribute-value)
-                         (= (:hungriness new-state) max-attribute-value)
-                         (= (:tiredness new-state) max-attribute-value)
-                         (= (:happiness new-state) min-attribute-value))
-                 (kill))))
   (breed name hungriness fullness happiness tiredness))

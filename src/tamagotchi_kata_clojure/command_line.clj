@@ -1,9 +1,10 @@
 (ns tamagotchi-kata-clojure.command-line
   (:gen-class)
   (:require [clojure.string :as str]
-            [clansi])
-  (:use [tamagotchi-kata-clojure.core :as tamagotchi]
-        [tamagotchi-kata-clojure.tic :as tic]))
+            [clansi]
+            [tamagotchi-kata-clojure.atom :as atom]
+            [tamagotchi-kata-clojure.core :as core]
+            [tamagotchi-kata-clojure.tic :as tic]))
 
 (def commands
   [{:name "show" :desc "shows your tamagotchi status"}
@@ -25,16 +26,16 @@
 (defmulti format-attribute-value :type)
 
 (defmethod format-attribute-value :decreasing [{type :type value :val}]
-  (if (< value (* tamagotchi/max-attribute-value 0.1))
+  (if (< value (* core/max-attribute-value 0.1))
     (clansi/style value :red)
-    (if (< value (* tamagotchi/max-attribute-value 0.25))
+    (if (< value (* core/max-attribute-value 0.25))
       (clansi/style value :yellow)
       (clansi/style value :green))))
 
 (defmethod format-attribute-value :increasing [{type :type value :val}]
-  (if (> value (* tamagotchi/max-attribute-value 0.9))
+  (if (> value (* core/max-attribute-value 0.9))
     (clansi/style value :red)
-    (if (> value (* tamagotchi/max-attribute-value 0.75))
+    (if (> value (* core/max-attribute-value 0.75))
       (clansi/style value :yellow)
       (clansi/style value :green))))
 
@@ -42,7 +43,7 @@
   (let [attribute-keyword (key attribute-def)
         attribute-label (:label (val attribute-def))
         attribute-type (:type (val attribute-def))]
-    (str attribute-label ": " (format-attribute-value {:type attribute-type :val (get @tamagotchi attribute-keyword)}))))
+    (str attribute-label ": " (format-attribute-value {:type attribute-type :val (get @atom/tamagotchi attribute-keyword)}))))
 
 (defn describe-command [{:keys [name desc]}]
   (println (format-command-name (format "%-5s" name)) desc))
@@ -62,22 +63,22 @@
   (case command
 
     :show
-    (show-status tamagotchi)
+    (show-status atom/tamagotchi)
 
     :feed
-    (do (tamagotchi/feed)
+    (do (atom/feed)
         (dispatch :show))
 
     :play
-    (do (tamagotchi/play)
+    (do (atom/play)
         (dispatch :show))
 
     :bed
-    (do (tamagotchi/put-to-bed)
+    (do (atom/put-to-bed)
         (dispatch :show))
 
     :poo
-    (do (tamagotchi/make-poop)
+    (do (atom/make-poop)
         (dispatch :show))
 
     :quit
@@ -95,18 +96,18 @@
 
 (defn- ui-tic []
   (do
-    (tamagotchi/tic)
-    (show-status tamagotchi)))
+    (atom/tic)
+    (show-status atom/tamagotchi)))
 
 (defn- init-tamagotchi []
   (do
     (println "Name your tamagotchi [Miyagi]")
     (let [[name & _] (str/split (read-line) #" ")]
       (if (str/blank? name)
-        (tamagotchi/create)
-        (tamagotchi/create :name name))
+        (atom/create)
+        (atom/create :name name))
       (tic/configure ui-tic)
-      (add-watch tamagotchi
+      (add-watch atom/tamagotchi
                  :quit-when
                  (fn [key atom old-state new-state]
                    (when (empty? new-state)

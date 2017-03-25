@@ -102,9 +102,9 @@
     (tamagotchi/tic)
     (show-status tamagotchi)))
 
-(defn configure-tic [delay]
+(defn configure-tic [delay fn]
   (at/every delay
-            ui-tic
+            fn
             tic-pool
             :initial-delay delay))
 
@@ -115,7 +115,7 @@
       (if (str/blank? name)
         (tamagotchi/create)
         (tamagotchi/create :name name))
-      (configure-tic tic-delay)
+      (configure-tic tic-delay ui-tic)
       (add-watch tamagotchi
                  :quit-when
                  (fn [key atom old-state new-state]

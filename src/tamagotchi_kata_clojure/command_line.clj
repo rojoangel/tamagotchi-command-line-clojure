@@ -4,7 +4,8 @@
             [clansi]
             [tamagotchi-kata-clojure.atom :as atom]
             [tamagotchi-kata-clojure.core :as core]
-            [tamagotchi-kata-clojure.tic :as tic]))
+            [tamagotchi-kata-clojure.tic :as tic]
+            [tamagotchi-kata-clojure.color :as color]))
 
 (def commands
   [{:name "show" :desc "shows your tamagotchi status"}
@@ -23,21 +24,9 @@
 (defn format-command-name [name]
   (clansi/style name :green))
 
-(defmulti format-attribute-value :type)
-
-(defmethod format-attribute-value :decreasing [{type :type value :val}]
-  (if (< value (* core/max-attribute-value 0.1))
-    (clansi/style value :red)
-    (if (< value (* core/max-attribute-value 0.25))
-      (clansi/style value :yellow)
-      (clansi/style value :green))))
-
-(defmethod format-attribute-value :increasing [{type :type value :val}]
-  (if (> value (* core/max-attribute-value 0.9))
-    (clansi/style value :red)
-    (if (> value (* core/max-attribute-value 0.75))
-      (clansi/style value :yellow)
-      (clansi/style value :green))))
+(defn format-attribute-value [{type :type value :val :as type-and-val}]
+  (let [color (color/value->color type-and-val)]
+    (clansi/style value color)))
 
 (defn format-attribute [attribute-def]
   (let [attribute-keyword (key attribute-def)

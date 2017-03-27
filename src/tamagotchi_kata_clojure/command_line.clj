@@ -25,7 +25,7 @@
   (clansi/style name :green))
 
 (defn format-attribute-value [{type :type value :val :as type-and-val}]
-  (let [color (color/value->color type-and-val)]
+  (let [color (color/value->color type-and-val identity)]
     (clansi/style value color)))
 
 (defn format-attribute [attribute-def]

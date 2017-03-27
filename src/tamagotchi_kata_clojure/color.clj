@@ -3,16 +3,16 @@
 
 (defmulti value->color :type)
 
-(defmethod value->color :decreasing [{type :type value :val}]
+(defmethod value->color :decreasing [{type :type value :val} kw->color-fn]
   (if (< value (* tamagotchi/max-attribute-value 0.1))
-    :red
+    (kw->color-fn :red)
     (if (< value (* tamagotchi/max-attribute-value 0.25))
-      :yellow
-      :green)))
+      (kw->color-fn :yellow)
+      (kw->color-fn :green))))
 
-(defmethod value->color :increasing [{type :type value :val}]
+(defmethod value->color :increasing [{type :type value :val} kw->color-fn]
   (if (> value (* tamagotchi/max-attribute-value 0.9))
-    :red
+    (kw->color-fn :red)
     (if (> value (* tamagotchi/max-attribute-value 0.75))
-      :yellow
-      :green)))
+      (kw->color-fn :yellow)
+      (kw->color-fn :green))))

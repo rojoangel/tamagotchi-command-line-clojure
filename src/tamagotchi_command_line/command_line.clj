@@ -2,10 +2,10 @@
   (:gen-class)
   (:require [clojure.string :as str]
             [clansi]
+            [tamagotchi.core :as core]
+            [tamagotchi.color :as color]
             [tamagotchi-command-line.atom :as atom]
-            [tamagotchi-command-line.core :as core]
-            [tamagotchi-command-line.tic :as tic]
-            [tamagotchi-command-line.color :as color]))
+            [tamagotchi-command-line.tic :as tic]))
 
 (def commands
   [{:name "show" :desc "shows your tamagotchi status"}

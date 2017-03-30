@@ -1,7 +1,7 @@
 (ns tamagotchi-command-line.atom-test
   (:use midje.sweet)
   (:use [tamagotchi-command-line.atom :as atom])
-  (:require [tamagotchi-command-line.core :as tamagotchi]))
+  (:require [tamagotchi.core :as tamagotchi]))
 
 (facts
   "about tamagotchi"

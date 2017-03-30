@@ -1,4 +1,4 @@
-(ns tamagotchi-command-line.atom
+(ns tamagotchi-command-line.state
   (:require [tamagotchi.core :as tamagotchi]))
 
 (def tamagotchi (atom {}))

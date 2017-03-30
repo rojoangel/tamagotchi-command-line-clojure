@@ -2,9 +2,8 @@
   (:gen-class)
   (:require [clojure.string :as str]
             [clansi]
-            [tamagotchi.core :as core]
             [tamagotchi.color :as color]
-            [tamagotchi-command-line.atom :as atom]
+            [tamagotchi-command-line.state :as tamagotchi]
             [tamagotchi-command-line.tic :as tic]))
 
 (def commands
@@ -32,7 +31,7 @@
   (let [attribute-keyword (key attribute-def)
         attribute-label (:label (val attribute-def))
         attribute-type (:type (val attribute-def))]
-    (str attribute-label ": " (format-attribute-value {:type attribute-type :val (get @atom/tamagotchi attribute-keyword)}))))
+    (str attribute-label ": " (format-attribute-value {:type attribute-type :val (get @tamagotchi/tamagotchi attribute-keyword)}))))
 
 (defn describe-command [{:keys [name desc]}]
   (println (format-command-name (format "%-5s" name)) desc))
@@ -52,22 +51,22 @@
   (case command
 
     :show
-    (show-status atom/tamagotchi)
+    (show-status tamagotchi/tamagotchi)
 
     :feed
-    (do (atom/feed)
+    (do (tamagotchi/feed)
         (dispatch :show))
 
     :play
-    (do (atom/play)
+    (do (tamagotchi/play)
         (dispatch :show))
 
     :bed
-    (do (atom/put-to-bed)
+    (do (tamagotchi/put-to-bed)
         (dispatch :show))
 
     :poo
-    (do (atom/make-poop)
+    (do (tamagotchi/make-poop)
         (dispatch :show))
 
     :quit
@@ -85,18 +84,18 @@
 
 (defn- ui-tic []
   (do
-    (atom/tic)
-    (show-status atom/tamagotchi)))
+    (tamagotchi/tic)
+    (show-status tamagotchi/tamagotchi)))
 
 (defn- init-tamagotchi []
   (do
     (println "Name your tamagotchi [Miyagi]")
     (let [[name & _] (str/split (read-line) #" ")]
       (if (str/blank? name)
-        (atom/create)
-        (atom/create :name name))
+        (tamagotchi/create)
+        (tamagotchi/create :name name))
       (tic/configure ui-tic)
-      (add-watch atom/tamagotchi
+      (add-watch tamagotchi/tamagotchi
                  :quit-when
                  (fn [key atom old-state new-state]
                    (when (empty? new-state)

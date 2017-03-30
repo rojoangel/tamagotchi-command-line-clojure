@@ -5,5 +5,4 @@
                  [clansi "1.0.0"]
                  [overtone/at-at "1.2.0"]]
   :profiles {:dev {:dependencies [[midje "1.8.3"]]}}
-  :main "tamagotchi-command-line.command-line")
-  
+  :main "tamagotchi-command-line.ui")

@@ -1,4 +1,4 @@
-(ns tamagotchi-command-line.command-line
+(ns tamagotchi-command-line.ui
   (:gen-class)
   (:require [clojure.string :as str]
             [clansi]

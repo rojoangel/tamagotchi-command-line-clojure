@@ -1,4 +1,6 @@
-# tamagotchi-kata-clojure
+# tamagotchi-command-line
+
+Tamagotchi game using the command line
 
 The project uses [Midje](https://github.com/marick/Midje/).
 

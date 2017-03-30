@@ -1,5 +1,5 @@
-(ns tamagotchi-kata-clojure.color
-  (:require [tamagotchi-kata-clojure.core :as tamagotchi]))
+(ns tamagotchi-command-line.color
+  (:require [tamagotchi-command-line.core :as tamagotchi]))
 
 (defmulti value->color :type)
 

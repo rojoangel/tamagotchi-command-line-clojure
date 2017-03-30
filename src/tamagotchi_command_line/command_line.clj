@@ -1,11 +1,11 @@
-(ns tamagotchi-kata-clojure.command-line
+(ns tamagotchi-command-line.command-line
   (:gen-class)
   (:require [clojure.string :as str]
             [clansi]
-            [tamagotchi-kata-clojure.atom :as atom]
-            [tamagotchi-kata-clojure.core :as core]
-            [tamagotchi-kata-clojure.tic :as tic]
-            [tamagotchi-kata-clojure.color :as color]))
+            [tamagotchi-command-line.atom :as atom]
+            [tamagotchi-command-line.core :as core]
+            [tamagotchi-command-line.tic :as tic]
+            [tamagotchi-command-line.color :as color]))
 
 (def commands
   [{:name "show" :desc "shows your tamagotchi status"}

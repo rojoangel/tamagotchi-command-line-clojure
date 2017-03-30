@@ -1,7 +1,7 @@
-(ns tamagotchi-kata-clojure.atom-test
+(ns tamagotchi-command-line.atom-test
   (:use midje.sweet)
-  (:use [tamagotchi-kata-clojure.atom :as atom])
-  (:require [tamagotchi-kata-clojure.core :as tamagotchi]))
+  (:use [tamagotchi-command-line.atom :as atom])
+  (:require [tamagotchi-command-line.core :as tamagotchi]))
 
 (facts
   "about tamagotchi"

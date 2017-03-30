@@ -1,5 +1,5 @@
-(ns tamagotchi-kata-clojure.atom
-  (:require [tamagotchi-kata-clojure.core :as tamagotchi]))
+(ns tamagotchi-command-line.atom
+  (:require [tamagotchi-command-line.core :as tamagotchi]))
 
 (def tamagotchi (atom {}))
 

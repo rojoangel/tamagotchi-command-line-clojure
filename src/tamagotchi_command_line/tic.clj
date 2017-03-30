@@ -1,4 +1,4 @@
-(ns tamagotchi-kata-clojure.tic
+(ns tamagotchi-command-line.tic
   (:require [overtone.at-at :as at]))
 
 (def pool (at/mk-pool))

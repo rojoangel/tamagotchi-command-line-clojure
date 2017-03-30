@@ -1,6 +1,6 @@
-(ns tamagotchi-kata-clojure.core-test
+(ns tamagotchi-command-line.core-test
   (:use midje.sweet)
-  (:use [tamagotchi-kata-clojure.core :as tamagotchi]))
+  (:use [tamagotchi-command-line.core :as tamagotchi]))
 
 (facts
   "about tamagotchi"

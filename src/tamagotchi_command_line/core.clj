@@ -1,4 +1,4 @@
-(ns tamagotchi-kata-clojure.core)
+(ns tamagotchi-command-line.core)
 
 (def default-initial-attribute-value 50)
 (def min-attribute-value 0)
